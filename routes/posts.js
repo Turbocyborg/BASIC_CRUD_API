@@ -1,5 +1,5 @@
 import express from 'express'
-import { getPosts, getPost, createPost, deletePost, updatePost } from '../controllers/postController'
+import { getPosts, getPost, createPost, deletePost, updatePost } from '../controllers/postController.js'
 const router = express.Router();
 
 //using let to define array so we can overwrite in our delete post

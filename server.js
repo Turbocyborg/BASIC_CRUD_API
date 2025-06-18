@@ -26,7 +26,7 @@
  //setup static folder to serve static files
  //middleware -> function that runs between the incoming request and outgoing response
  //middle helps to remove route definitions for static files
- //app.use(express.static(path.join(__dirname, 'public')));
+  app.use(express.static(path.join(__dirname, 'public')));
  
 //Routes
 app.use('/api/posts',posts);
