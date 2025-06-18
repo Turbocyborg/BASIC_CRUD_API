@@ -11,8 +11,8 @@
 // Using ES Module syntax
 
  //__dirname is not available by default in ES Module context. You'll need to define it manually
- const filename = fileURLToPath(import.meta.url);
- const __dirname = path.dirname(filename);
+ const __filename = fileURLToPath(import.meta.url);
+ const __dirname = path.dirname(__filename);
 
  const app = express();
 
