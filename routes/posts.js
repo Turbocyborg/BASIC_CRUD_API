@@ -9,6 +9,8 @@ const router = express.Router();
     {id:2, title: 'post2'},
     {id:3, title: 'post3'},
  ];
+ 
+ //next -> function that you are going to run at the end of your middleware function
 
 
 
@@ -25,19 +27,21 @@ const router = express.Router();
  })
 
   //Get Single Posts
- router.get('/:id', (req,res)=>{
+ router.get('/:id', (req,res,next)=>{
     const id = parseInt(req.params.id);//req.params is an object that contains the route parameters
     const post = posts.find((post)=>post.id === id); //find returns the first element in the array that satisfies the provided testing function
     if(!post){
-        res.status(404).json({message:`A post with id ${id} not found`});
+        const error = new Error(`A post with id of ${id} was not found`);
+        error.status=400;
+        return next(error);
     }else{
         res.status(200).json(post); //automatically sets the content-type to application/json
     }
     //res.json(posts.filter((post)=>post.id===id));//filter returns an array of posts that match the condition
  });
 
- //create a new post
- router.post('/',(req,res)=>{
+ //Create a new post
+ router.post('/',(req,res,next)=>{
     //console.log(req.body); //req.body is an object that contains the parsed body of the request
     //in express we dont need to turn it into JSON, it is done automatically by the body-parser middleware
     
@@ -47,7 +51,9 @@ const router = express.Router();
     };
 
     if(!newPost.title){
-        return res.status(400).json({message: 'Please Include a title'}); //400 Bad Request
+        const error = new Error(`Please Include A Title`);
+        error.status=400;
+        return next(error);
     }
 
     posts.push(newPost); //push adds a new post to the posts array
@@ -56,12 +62,14 @@ const router = express.Router();
  });
 
  // Update Post
- router.put('/:id',(req,res)=>{
+ router.put('/:id',(req,res,next)=>{
     const id = parseInt(req.params.id);
     const post = posts.find((post)=>post.id===id);
 
     if(!post){
-        res.status(404).json({message:`A post with id ${id} not found`});
+        const error = new Error(`A post with id of ${id} was not found`);
+        error.status=400;
+        return next(error);
     }else{
         post.title=req.body.title;
         res.status(200).json(post); //automatically sets the content-type to application/json
@@ -74,9 +82,12 @@ const router = express.Router();
     const post = posts.find((post)=>post.id===id);
 
     if(!post){
-        res.status(404).json({message:`A post with id ${id} not found`});
+        const error = new Error(`A post with id of ${id} was not found`);
+        error.status=400;
+        return next(error);
     }else{
         //all posts except the post with the current id
+        //overwriting is easy since we declare array with let keyword
         posts = posts.filter((post)=>post.id!==id);
         res.status(200).json(post); //automatically sets the content-type to application/json
     }

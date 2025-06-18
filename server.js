@@ -2,6 +2,8 @@
  import express from 'express';
  import path, { parse } from 'path';
  import posts from './routes/posts.js'; // Importing posts route
+ import logger from './middleware/logger.js'
+ import errorHandler from './middleware/error.js';
  import { fileURLToPath } from 'url';
 
  const port = process.env.PORT || 3000;
@@ -16,6 +18,9 @@
  //BODY PARSER MIDDLEWARE
  app.use(express.json()); // for parsing raw application/json
  app.use(express.urlencoded({extended: false})); // for parsing application/x-www-form-urlencoded
+ 
+ //logger middleware
+ app.use(logger);
 
  //setup static folder to serve static files
  //middleware -> function that runs between the incoming request and outgoing response
@@ -25,6 +30,8 @@
 //Routes
 app.use('/api/posts',posts);
 
+//Error Handler
+app.use(errorHandler);
 
 //now we don't need to define routes for static files like CSS, JS, images, etc.
 
