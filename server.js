@@ -3,6 +3,7 @@
  import path, { parse } from 'path';
  import posts from './routes/posts.js'; // Importing posts route
  import logger from './middleware/logger.js'
+ import notFound from './middleware/notFound.js';
  import errorHandler from './middleware/error.js';
  import { fileURLToPath } from 'url';
 
@@ -29,6 +30,14 @@
  
 //Routes
 app.use('/api/posts',posts);
+
+//catch all errors
+app.use(notFound);
+// app.use((req, res, next)=> {
+//     const error = new Error('Not Found');
+//     error.status = 404;
+//     next(error);
+// });
 
 //Error Handler
 app.use(errorHandler);
